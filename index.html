@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Delair Travels – Digital Catalogue</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6F1E;
+      --white: #FFF;
+      --gray: #F7F7F7;
+      --text: #262626;
+      --border: #FFE5D0;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--gray);
+      font-family: 'Source Sans Pro', Arial, sans-serif;
+      color: var(--text);
+      scroll-behavior: smooth;
+    }
+    /* HEADER */
+    .main-header {
+      background: #FF6F1E;
+      text-align: center;
+      padding: 2.2rem 1rem 2rem 1rem;
+      box-shadow: 0 4px 24px #FF6F1E22;
+    }
+    .delair-logo {
+      width: 180px;
+      max-width: 90vw;
+      height: auto;
+      display: inline-block;
+      margin: 0 auto;
+      filter: drop-shadow(0 2px 8px #fff3);
+    }
+    @media (max-width: 600px) {
+      .delair-logo { width: 120px; }
+      .main-header { padding: 1.2rem 0.5rem 1.2rem 0.5rem; }
+    }
+    /* LANDING SECTIONS */
+    .landing-section {
+      position: relative;
+      padding: 4rem 0 3rem 0;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      background: var(--white);
+      border-radius: 2.5rem;
+      box-shadow: 0 4px 32px rgba(255,111,30,0.09);
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .landing-section:not(:first-child) {
+      margin-top: 3rem;
+    }
+    .section-bg-shape {
+      position: absolute;
+      top: -70px;
+      right: -90px;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle at 60% 40%, #FF6F1E44 0%, #fff0 80%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .section-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.8s cubic-bezier(.77,0,.18,1), transform 0.8s cubic-bezier(.77,0,.18,1);
+    }
+    .section-content.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .section-icon {
+      font-size: 3.5rem;
+      color: var(--orange);
+      margin-bottom: 1.3rem;
+      filter: drop-shadow(0 3px 8px #FF6F1E22);
+    }
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+    .section-highlight {
+      background: var(--orange);
+      color: #fff;
+      padding: 0.15em 0.5em;
+      border-radius: 0.5em;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 0.2em;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+    .section-desc {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+      max-width: 700px;
+      color: #3a3a3a;
+    }
+    .section-points {
+      margin: 0 0 1.2rem 0;
+      padding: 0 0 0 1.2em;
+      list-style: disc;
+      display: block;
+      color: #444;
+    }
+    .section-points li {
+      font-size: 1.08rem;
+      margin-bottom: 0.4em;
+    }
+    .section-cta {
+      margin-top: 1.5rem;
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.75rem 2.2rem;
+      border-radius: 2em;
+      text-decoration: none;
+      box-shadow: 0 2px 16px #FF6F1E33;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .section-cta:hover {
+      background: #e85c00;
+      transform: translateY(-2px) scale(1.04);
+    }
+    /* CATALOGUE */
+    .catalogue-section {
+      max-width: 1200px;
+      margin: 3rem auto 3rem auto;
+      padding: 0 1rem;
+    }
+    .catalogue-title {
+      color: var(--orange);
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 2.2rem;
+      letter-spacing: -1px;
+      text-align: center;
+    }
+    .tour-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    .tour-card {
+      background: var(--white);
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 24px rgba(255,111,30,0.09);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: box-shadow 0.25s, transform 0.25s;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 0.7s forwards;
+      text-decoration: none;
+      color: inherit;
+    }
+    .tour-card:hover {
+      box-shadow: 0 8px 36px #FF6F1E33;
+      transform: translateY(-6px) scale(1.025);
+      border-color: var(--orange);
+      text-decoration: none;
+      color: inherit;
+    }
+    .tour-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      transition: filter 0.3s;
+      display: block;
+    }
+    .tour-card:hover .tour-image {
+      filter: brightness(0.93) saturate(1.1);
+    }
+    .tour-info {
+      padding: 1.3rem 1.5rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
+    .tour-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--orange);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+    .tour-dates {
+      font-size: 1.01rem;
+      color: #555;
+      margin-bottom: 0.7rem;
+      font-weight: 600;
+    }
+    .tour-desc {
+      font-size: 1.08rem;
+      color: #333;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      flex: 1 1 auto;
+    }
+    .tour-price {
+      color: #1a7f37;
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin-bottom: 0.2rem;
+    }
+    .tour-inclusions {
+      font-size: 0.97rem;
+      color: #666;
+      margin-bottom: 0;
+    }
+    footer {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 2.2rem 1rem 1.2rem 1rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      margin-top: 4rem;
+      position: relative;
+    }
+    footer .footer-brand {
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    footer a:hover {
+      color: var(--orange);
+    }
+    @media (max-width: 700px) {
+      .main-header { padding: 1.5rem 0.5rem 1.1rem 0.5rem; }
+      .delair-logo { width: 120px; }
+      .catalogue-title { font-size: 1.1rem; }
+      .tour-grid { grid-template-columns: 1fr; }
+      .tour-image { height: auto; }
+      footer { font-size: 0.95rem; }
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header">
+    <img src="images/logo.png" alt="Delair Travels Logo" class="delair-logo">
+  </header>
+
+   <!-- DELMAGE TOURS – INBOUND & EVENT SERVICES -->
+<section class="landing-section" id="inbound">
+  <div class="section-bg-shape"></div>
+  <div class="section-content">
+    <div class="section-icon"></div>
+    <div class="section-title">Delmage Tours</div>
+    <div class="section-highlight">Comprehensive Travel, Events, and Hospitality Solutions</div>
+    <div class="section-desc">
+      At Delmage Tours, we go beyond traditional travel facilitation to deliver a complete range of tailor-made services that elevate every journey and event. Whether you're traveling for business, leisure, or celebrating a special milestone, our expert team ensures a seamless, personalized experience from start to finish.<br><br>
+      With a strong local presence in Sri Lanka and the Maldives, and a reputation for service excellence, we offer everything from luxury accommodation and premium transport to expertly managed events and destination weddings.
+    </div>
+
+    <div class="section-desc" style="margin-bottom:0.7rem; border-top:1px solid #ffe5d0; padding-top:1.2em;">
+      <b>Accommodation</b><br>
+      Experience exceptional stays in Sri Lanka and the Maldives, with carefully selected:
+      <ul class="section-points">
+        <li>Luxury hotels and private villas</li>
+        <li>Budget-friendly and mid-range options</li>
+        <li>Custom accommodation packages to match your preferences and needs</li>
+      </ul>
+    </div>
+    <div class="section-desc" style="margin-bottom:0.7rem; border-top:1px solid #ffe5d0; padding-top:1.2em;">
+      <b>Transport Solutions</b><br>
+      We offer a wide range of ground, air, and sea transport options for a truly seamless journey:
+      <ul class="section-points">
+        <li>AC Cars | Luxury Vans | Jeeps</li>
+        <li>Luxury Coaches | Scenic Trains</li>
+        <li>Sea Planes | Helicopters | Private Yachts</li>
+      </ul>
+      Our professional team of multilingual chauffeurs and guides provide expert insight, local knowledge, and curated experiences that showcase the best of Sri Lanka.
+    </div>
+    <div class="section-desc" style="margin-bottom:0.7rem; border-top:1px solid #ffe5d0; padding-top:1.2em;">
+      <b>Events & MICE Services</b><br>
+      From intimate gatherings to large-scale corporate events, we bring your vision to life with:
+      <ul class="section-points">
+        <li>International & Regional Conferences</li>
+        <li>Business Meetings & Incentive Tours</li>
+        <li>Product Launches & Exhibitions</li>
+        <li>Annual Get-togethers & Award Ceremonies</li>
+      </ul>
+      We Provide:
+      <ul class="section-points">
+        <li>Seamless venue and logistics coordination</li>
+        <li>Full secretariat services</li>
+        <li>End-to-end event planning and execution</li>
+      </ul>
+    </div>
+    <div class="section-desc" style="margin-bottom:0.7rem; border-top:1px solid #ffe5d0; padding-top:1.2em;">
+      <b>Weddings & Celebrations</b><br>
+      Plan your dream destination wedding with our expert team managing every detail:
+      <ul class="section-points">
+        <li>Venue selection & theme décor</li>
+        <li>Catering & entertainment</li>
+        <li>Printing & custom stationery</li>
+        <li>Photography & videography</li>
+        <li>Wedding cake & stage setup</li>
+        <li>Honeymoon planning & pre/post-wedding tours</li>
+      </ul>
+    </div>
+    <div class="section-desc" style="margin-bottom:0.7rem; border-top:1px solid #ffe5d0; padding-top:1.2em;">
+      <b>Why Choose Us?</b><br>
+      <ul class="section-points">
+        <li>Customized experiences across Sri Lanka & the Maldives</li>
+        <li>Trusted partners for luxury, logistics, and leisure</li>
+        <li>Dedicated multilingual support team</li>
+        <li>One-stop service for travel, events, and celebration planning</li>
+      </ul>
+    </div>
+    <div class="section-desc" style="margin-top:2em; border-top:1px solid #ffe5d0; padding-top:1.2em;">
+      <b>Contact Us Today</b><br>
+      Email: <a href="mailto:isuru.tours@delmege.com">isuru.tours@delmege.com</a> | <a href="mailto:rehana@delairtravel.com">rehana@delairtravel.com</a>
+    </div>
+  </div>
+</section>
+  
+  <!-- ABOUT US – VISA SERVICES (no emojis) -->
+  <section class="landing-section" id="visa-services">
+    <div class="section-bg-shape"></div>
+    <div class="section-content">
+      <div class="section-icon"></div>
+      <div class="section-title">Visa House</div>
+      <div class="section-highlight">Expert Visa Services, Delivered to Your Doorstep</div>
+      <div class="section-desc">
+        <b>Who We Are</b><br>
+        Delair Travels – Visa House is a trusted name in international visa facilitation, offering reliable, end-to-end solutions for both individuals and corporate clients. With years of industry expertise and a customer-first approach, we handle the complete visa process-so you don’t have to.<br><br>
+        <b>What We Offer</b>
+        <ul class="section-points" style="margin-bottom:0.7rem;">
+          <li>Tourist Visa Processing for a wide range of international destinations</li>
+          <li>Door-to-Door Service: We collect documents, process applications, and deliver passports</li>
+          <li>End-to-End Support: From consultation to final delivery</li>
+          <li>Compliance & Accuracy: Strict adherence to embassy guidelines</li>
+          <li>Strong Global Network: Established connections with embassies, consulates, and partners</li>
+        </ul>
+        <b>Destinations Covered:</b><br>
+        Europe, United Kingdom, USA, Japan, China, Australia, and many more.<br><br>
+        <b>Why Choose Delair Travels</b><br>
+        Door to Door Service &nbsp; &bull; &nbsp; Fast and efficient processing &nbsp; &bull; &nbsp; Personalized customer support &nbsp; &bull; &nbsp; No queues, no multiple visits<br><br>
+        <i>Let Us Handle the Paperwork-so you can focus on your journey.</i>
+        <br><br>
+        <b>Contact Us:</b><br>
+        <a href="mailto:husny@delairtravel.com">husny@delairtravel.com</a> &nbsp;|&nbsp;
+        <a href="mailto:pradees@delairtravel.com">pradees@delairtravel.com</a> &nbsp;|&nbsp;
+        <a href="mailto:stefan@delairtravel.com">stefan@delairtravel.com</a>
+      </div>
+      <a class="section-cta" href="mailto:husny@delairtravel.com">Get Visa Assistance</a>
+    </div>
+  </section>
+
+
+  <!-- ABOUT US – OUTBOUND (no emojis) -->
+  <section class="landing-section" id="outbound">
+    <div class="section-bg-shape"></div>
+    <div class="section-content">
+      <div class="section-icon"></div>
+      <div class="section-title">Delair Travels</div>
+      <div class="section-highlight">Your Partner in Seamless Corporate & Leisure Travel Execution</div>
+      <div class="section-desc">
+        At Delair Travels, we understand that travel today is more than movement-it's a powerful enabler of growth, connection, and discovery. Whether you're representing your company on the global stage or exploring new destinations for leisure, we’re here to deliver a seamless, stress-free travel experience tailored to your needs.<br><br>
+        <b>Our Services at a Glance</b>
+        <ul class="section-points" style="margin-bottom:0.7rem;">
+          <li><b>Corporate Travel Solutions:</b> International flight bookings, visa facilitation & compliance, hotel accommodation, ground logistics, MICE travel, custom itineraries, 24/7 support</li>
+          <li><b>Leisure & Holiday Travel:</b> Curated tour packages, guided group tours, custom itineraries, honeymoons, adventure & cultural tours, premium holiday planning</li>
+        </ul>
+        <b>Why Choose Delair Travels?</b><br>
+        Tailored travel packages for every occasion<br>
+        Competitive rates through our global partner network<br>
+        Door to door visa services<br>
+        Trusted by corporate and individual travelers alike<br><br>
+        <b>Where We Take You:</b><br>
+        Europe, USA, Japan, Kenya, Australia, and many more.<br><br>
+        <i>Let’s Plan Your Next Journey-whether it's a conference in Singapore, a family vacation in Italy, or an incentive trip to Australia, Delair Travels ensures every journey is smooth, strategic, and unforgettable.</i><br><br>
+        <b>Contact Us:</b><br>
+        <a href="mailto:chandula@delairtravel.com">chandula@delairtravel.com</a> &nbsp;|&nbsp;
+        <a href="mailto:pavithra@delairtravel.com">pavithra@delairtravel.com</a> &nbsp;|&nbsp;
+        <a href="mailto:kalpani@delairtravel.com">kalpani@delairtravel.com</a> &nbsp;|&nbsp;
+        <a href="mailto:nawoda@delairtravel.com">nawoda@delairtravel.com</a>
+      </div>
+      <a class="section-cta" href="mailto:chandula@delairtravel.com">Start Your Journey</a>
+    </div>
+  </section>
+
+  <!-- CATALOGUE -->
+  <section class="catalogue-section" id="catalogue">
+    <div class="catalogue-title">Upcoming Tours - 2025</div>
+    <div class="tour-grid">
+      <!-- 1-11: update descriptions as needed. Add your Facebook links in href="" -->
+      <a class="tour-card" style="animation-delay:0.05s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img1.png" alt="Velankanni, Pondicherry & Chennai">
+        <div class="tour-info">
+          <div class="tour-title">Velankanni, Pondicherry & Chennai</div>
+          <div class="tour-dates">30th Aug – 2nd Sep 2025 &nbsp; | &nbsp; 3N/4D</div>
+          <div class="tour-desc">
+            Experience a spiritual and cultural journey through South India’s sacred sites. Visit the Basilica of Our Lady of Good Health, Basilica of the Sacred Heart of Jesus, and Thomas Cathedral Basilica, with time for shopping and local exploration.
+          </div>
+          <div class="tour-price">LKR 199,000</div>
+          <div class="tour-inclusions">All major basilicas, hotels, local transfers, and guided tours included.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.10s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img2.png" alt="Discover Kenya">
+        <div class="tour-info">
+          <div class="tour-title">Discover Kenya</div>
+          <div class="tour-dates">9th – 17th Sep 2025 &nbsp; | &nbsp; 8N/9D</div>
+          <div class="tour-desc">
+            Embark on a thrilling African safari! Explore Nairobi, Samburu, Lake Nakuru, and the Maasai Mara with unlimited game drives, 4-star accommodation, and unforgettable wildlife encounters.
+          </div>
+          <div class="tour-price">LKR 1,295,000 + Visa Fee</div>
+          <div class="tour-inclusions">Full board, return airfare, all transfers, game drives, and more.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.15s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img3.png" alt="Turkey">
+        <div class="tour-info">
+          <div class="tour-title">Turkey</div>
+          <div class="tour-dates">5th – 14th Sep & 18th – 27th Oct 2025 &nbsp; | &nbsp; 9N/10D</div>
+          <div class="tour-desc">
+            Discover Istanbul, Ankara, Cappadocia, Pamukkale, and more. Enjoy hot air balloon rides, ancient ruins, and Turkish hospitality on this immersive, all-inclusive tour.
+          </div>
+          <div class="tour-price">LKR 788,000 / 828,000 + Visa Fee</div>
+          <div class="tour-inclusions">Full board, return airfare, 4-star hotels, all tours & transfers.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.20s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img4.png" alt="Egypt">
+        <div class="tour-info">
+          <div class="tour-title">Egypt</div>
+          <div class="tour-dates">4th – 13th Oct & 1st – 10th Dec 2025 &nbsp; | &nbsp; 9N/10D</div>
+          <div class="tour-desc">
+            Step back in time to the land of pharaohs! Marvel at the Pyramids, Sphinx, and Nile River, with 5-star accommodation and expertly guided tours.
+          </div>
+          <div class="tour-price">LKR 738,000 / 830,000 + Visa Fee</div>
+          <div class="tour-inclusions">Full board, return airfare, all tours & transfers.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.25s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img5.png" alt="Bangkok Tour">
+        <div class="tour-info">
+          <div class="tour-title">Bangkok Tour</div>
+          <div class="tour-dates">Multiple departures &nbsp; | &nbsp; 4N/5D</div>
+          <div class="tour-desc">
+            Explore the vibrant city of Bangkok! Visit Safari World, Marine Park, temples, and enjoy shopping, local cuisine, and city tours with daily breakfast and comfortable hotel stays.
+          </div>
+          <div class="tour-price">LKR 185,000 (3-star) / 195,000 (4-star) + Visa Fee</div>
+          <div class="tour-inclusions">Hotel, breakfast, tours, transfers, and more.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.30s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img6.png" alt="Malaysia Tour">
+        <div class="tour-info">
+          <div class="tour-title">Malaysia Tour</div>
+          <div class="tour-dates">Multiple departures &nbsp; | &nbsp; 4N/5D</div>
+          <div class="tour-desc">
+            Discover Malaysia’s highlights: Kuala Lumpur, Genting Highlands, Batu Caves, and theme parks. Enjoy city tours, shopping, and daily breakfast with premium accommodation.
+          </div>
+          <div class="tour-price">LKR 185,000 (3-star) / 205,000 (4-star) + Visa Fee</div>
+          <div class="tour-inclusions">Hotel, breakfast, tours, transfers, and more.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.35s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img7.png" alt="Kuala Lumpur">
+        <div class="tour-info">
+          <div class="tour-title">Kuala Lumpur</div>
+          <div class="tour-dates">26th June & 9th July 2025 &nbsp; | &nbsp; 3N/4D & 4N/5D</div>
+          <div class="tour-desc">
+            Enjoy the best of Kuala Lumpur with tours to Genting Highlands, Batu Caves, Sunway Lagoon, and more. Perfect for families and groups!
+          </div>
+          <div class="tour-price">LKR 205,000 (3N/4D) / 221,000 (4N/5D)</div>
+          <div class="tour-inclusions">Hotel, breakfast, tours, transfers, and more.</div>
+        </div>
+      </a>
+      <!-- NEW TOURS -->
+      <a class="tour-card" style="animation-delay:0.40s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img8.png" alt="Vietnam & Cambodia">
+        <div class="tour-info">
+          <div class="tour-title">Langkawi & Kuala Lampur</div>
+          <div class="tour-dates">Multiple departures &nbsp; | &nbsp; 5N/6D</div>
+          <div class="tour-desc">
+            This tour takes you to the scenic island of Langkawi, where you’ll visit the Sky Bridge, Cable Automobile, and enjoy a city tour. Then, travel to Kuala Lumpur to explore the Twin Towers, KL Tower, Genting Highlands & Cable Car, and the iconic Batu Caves.
+          </div>
+          <div class="tour-price">LKR 115,000 per person</div>
+          <div class="tour-inclusions">All hotels, breakfast, tours, transfers, and more.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.45s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img9.png" alt="Japan">
+        <div class="tour-info">
+          <div class="tour-title">Dubai</div>
+          <div class="tour-dates">Multiple departures &nbsp; | &nbsp; 4N/5D</div>
+          <div class="tour-desc">
+            Explore the dazzling city of Dubai with visits to the Miracle Garden, the towering Burj Khalifa, KL Tower (if part of a combo), a relaxing Dhow Cruise Dinner, and an exciting city tour and shopping experience.
+          </div>
+          <div class="tour-price">LKR 200,000 per person</div>
+          <div class="tour-inclusions">Hotels, breakfast, tours, transfers, and more.</div>
+        </div>
+      </a>
+      <a class="tour-card" style="animation-delay:0.50s;" href="#" target="_blank">
+        <img class="tour-image" src="images/img10.png" alt="Europe">
+        <div class="tour-info">
+          <div class="tour-title">Bangkok & Phuket</div>
+          <div class="tour-dates">Multiple departures &nbsp; | &nbsp; 5N/6D</div>
+          <div class="tour-desc">
+            This tour takes you through some of Thailand’s most popular attractions, including the breathtaking Phi Phi Island, an enchanting Dinner Cruise, and a fun-filled day at Dream World, a perfect mix of natural beauty, cultural experiences, and family entertainment.
+          </div>
+          <div class="tour-price">LKR 115,000 per person</div>
+          <div class="tour-inclusions">Hotels, breakfast, tours, transfers, and more.</div>
+        </div>
+      </a>
+    
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">Delair Travels</span>
+    <div>
+      &copy; 2025 Delair Travels. All rights reserved. | 
+      <a href="mailto:info@delairtravels.com">inquiries@delairtravel.com</a>
+    </div>
+    <div style="margin-top:0.5rem; font-size:0.95em;">Your journey, our expertise.</div>
+  </footer>
+  <script>
+    // Animate sections on scroll
+    function revealSections() {
+      document.querySelectorAll('.section-content').forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80) {
+          section.classList.add('visible');
+        }
+      });
+      document.querySelectorAll('.tour-card').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 60) {
+          card.style.opacity = 1;
+          card.style.transform = "none";
+        }
+      });
+    }
+    window.addEventListener('scroll', revealSections);
+    window.addEventListener('DOMContentLoaded', revealSections);
+  </script>
+</body>
+</html>
